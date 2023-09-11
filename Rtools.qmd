@@ -1,0 +1,52 @@
+---
+title: "simple R tools"
+---
+
+In this page I attempt to provide some R functions that could be useful for fellow scientists working on plant ecology. \
+Any feedback is more than welcome. You can write me at gabriele.midolo hat gmail.com
+
+## Quickly obtain LHS traits for the European flora in R
+
+The [FloraVeg.EU](https://floraveg.eu/) website is a great source to obtain data for the European vegetation, including habitat information and species traits. Some of these information are available at the [download section](https://floraveg.eu/download/). The data on FloraVeg.EU also contains some information on three main functional traits of the LHS scheme proposed in the famous paper by [Westoby (1998)](https://doi.org/10.1023/A:1004327224729), namely specific leaf area (SLA), plant height and seed mass - but they are not yet available on the website, as they can be obtained using .
+
+These data are however not (yet!) available in the download section.
+
+The best solution to get such trait data is to get in touch with my former colleagues in Brno (Czech Republic) ([see contacts here](https://floraveg.eu/homepage/contact)) (of course databases like TRY and LEDA are also great option). But sometimes I just need traits for a few single species for quick analysis - (or to make comparisons / check outliers of LHS traits with other databases). In such cases one can easily use this function to get traits, using the `rvest` R package (Wickham, 2022).\
+\
+N.B.: Please, cite the FloraVeg.EU when using the references listed below!
+
+**References:**
+
+::: {style="text-indent: -40px; padding-left: 40px;"}
+FloraVeg.EU -- Database of European Vegetation, Habitats and Flora. www.floraveg.eu
+
+Westoby, M. (1998). A leaf-height-seed (LHS) plant ecology strategy scheme. *Plant and soil*, *199*, 213-227. <https://doi.org/10.1023/A:1004327224729>
+
+Wickham H (2022). *rvest: Easily Harvest (Scrape) Web Pages*. R package version 1.0.3, <https://CRAN.R-project.org/package=rvest>.
+:::
+
+**Data source and citation:**
+
+::: {style="text-indent: -40px; padding-left: 40px;"}
+Axmanová, I. (2022). Plant height. -- www.FloraVeg.EU.
+
+Axmanová, I. (2022). Specific leaf area. -- www.FloraVeg.EU.
+
+Axmanová, I. (2022). Seed mass. -- www.FloraVeg.EU.
+
+French Flora database (baseflor), project of Flore et végétation de la France et du Monde: CATMINAT. Available at <http://philippe.julve.pagesperso-orange.fr/catminat.htm> \[accessed June 2020\]
+
+García-Gutiérrez, T., Jiménez-Alfaro, B., Fernández-Pascual, E., & Müller, J. V. (2018). Functional diversity and ecological requirements of alpine vegetation types in a biogeographical transition zone. *Phytocoenologia*, 77--89. <https://doi.org/10.1127/phyto/2017/0224>
+
+Guarino, R., La Rosa, M. & Pignatti, S. (Eds) (2019). Flora d'Italia, volume 4. Bologna: Edagricole.
+
+Hintze, C., Heydel, F., Hoppe, C., Cunze, S., König, A., & Tackenberg, O. (2013). D3: The Dispersal and Diaspore Database -- Baseline data and statistics on seed dispersal. *Perspectives in Plant Ecology, Evolution and Systematics*, 15(3), 180--192. https://doi.org/10.1016/j.ppees.2013.02.001
+
+Ladouceur, E., Bonomi, C., Bruelheide, H., Klimešová, J., Burrascano, S., Poschlod, P., ... Jiménez-Alfaro, B. (2019). The functional trait spectrum of European temperate grasslands. *Journal of Vegetation Science*, 30(5), 777--788. <https://doi.org/10.1111/jvs.12784>
+
+Kaplan, Z., Danihelka, J., Chrtek, J. Jr., Kirschner, J., Kubát, K., Štěpánek, J. & Štech, M. (Eds) (2019). Klíč ke květeně České republiky \[Key to the flora of the Czech Republic\]. Ed. 2. Praha: Academia.
+
+Kleyer, M., Bekker, R. M., Knevel, I. C., Bakker, J. P., Thompson, K., Sonnenschein, M., ... Peco, B. (2008). The LEDA Traitbase: A database of life-history traits of the Northwest European flora. *Journal of Ecology*, 96(6), 1266--1274. <https://doi.org/10.1111/j.1365-2745.2008.01430.x>
+
+Tavşanoğlu, Ç., & Pausas, J. (2018). A functional trait database for Mediterranean Basin plants. *Scientific data*, 5, 180135. <https://doi.org/10.1038/sdata.2018.135>
+:::
