@@ -3,18 +3,22 @@ title: "CV (in brief)"
 ---
 
 ### **Education and Employment History**
+\
+![](imgs/timeframe.career.crop.png){fig-align="center"}
+\
 
 -   **Researcher (III level)** (2023 - current) at [CNR-IRET](https://www.iret.cnr.it/en/){target="_blank"} - National Research Council of Italy, Pisa (Italy);
 
 -   **Postdoctoral fellow** (2021 - 2023) at the [Vegetation Science Group](https://botzool.cz/vegsci/){target="_blank"} of the Department of Botany and Zoology, Masaryk University, Brno (Czech Republic);
 
--   **PhD in Mountain Environment & Agriculture** (2017 - 2021) cum laude at the Free University of Bozen-Bolzano, Bolzano (Italy). Thesis title: "*Meta-analyses upon the intraspecific plant trait variability within the environmental and geographic space*" (supervisor: Camilla Wellstein);\
+-   **PhD in Mountain Environment & Agriculture** (2017 - 2021) cum laude at the Free University of Bozen-Bolzano, Bolzano (Italy). Thesis title: "[*Meta-analyses upon the intraspecific plant trait variability within the environmental and geographic space*](https://hdl.handle.net/10863/34076){target="_blank"}" (supervisor: Camilla Wellstein);\
     **Visiting PhD student** (2020, 6 months) at the [Antonelli Lab](https://antonelli-lab.net/){target="_blank"}, Gothenburg Global Biodiversity Centre - University of Gothenburg, Gothenburg (Sweden);
 
 -   **MSc Environmental Science** (2015 - 2017) at Wageningen University & Research, Wageningen (The Netherlands). MSc thesis at the [ESA group](https://www.wur.nl/en/research-results/chair-groups/environmental-sciences/environmental-systems-analysis-group.htm){target="_blank"}: "*Plant biodiversity loss following increased atmospheric nitrogen deposition: A systematic review*" (supervisors: Wim De Vries; Rob Alkemade); **\
     Intern (MSc Internship)** (2017, 4 months) at [Forest & Nature Lab](https://www.ugent.be/bw/environment/en/research/fornalab){target="_blank"} -- Department of Forest and Water Management -- Ghent University, Ghent (Belgium);
 
 -   **BSc Forest Science** (2011 - 2014) at University of Turin, Turin (Italy) 110 cum laude. Thesis title (in Italian): "Redox reactions in the soil and their environmental significance" (supervisor: Franco Ajmone Marsan).
+\
 
 ### Main publications
 

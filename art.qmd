@@ -1,0 +1,85 @@
+---
+title: "Drawings and Paintings"
+---
+
+\
+\
+<center>
+
+![**Half moka pot, two peaches, one banana**\
+Soft pastels on paper (25 × 20 cm)\
+June 2023](artimg/mpb.jpg){.illustration fig-align="center" width="80%"}
+
+</center>
+\
+<center>
+
+![**Onion and garlic**\
+Soft pastels on paper (22 × 22 cm)\
+July 2023](artimg/oniongarlic.jpg){.illustration fig-align="center" width="80%"}
+
+</center>
+\
+<center>
+
+![**Half moka pot with spoon and apricots**\
+Soft pastels on paper (25 × 20 cm)\
+June 2023](artimg/aprcts.jpg){.illustration fig-align="center" width="80%"}
+
+</center>
+\
+<center>
+
+![**Study of glass with hard pastels**\
+Hard pastels on paper (20 × 15 cm)\
+June 2023](artimg/studywithhardpastels.jpg){.illustration fig-align="center" width="80%"}
+
+</center>
+\
+<center>
+
+![**A man**\
+Oil pastels on paper (21 × 30 cm)\
+March 2023](artimg/man.jpg){.illustration fig-align="center" width="85%"}
+
+</center>
+\
+<center>
+
+![**Two friends**\
+Oil pastels on canvas board (25 × 30 cm)\
+August 2023](artimg/dueamici.jpg){.illustration fig-align="center" width="85%"}
+
+</center>
+\
+<center>
+
+![**Mocking of Christ**\
+Watercolor and pen on paper (21 × 30 cm)\
+September 2023](artimg/cristoderiso.jpg){.illustration fig-align="center" width="85%"}
+
+</center>
+\
+<center>
+
+![**Jesus's death**\
+Ball pen on paper (21 × 30 cm)\
+October 2022](artimg/jesusdeath.jpg){.illustration fig-align="center" width="85%"}
+
+</center>
+\
+<center>
+
+![**Madonna and Child**\
+Ball pen on paper with digital paint (21 × 30 cm)\
+September 2022](artimg/madonnaconbambino.jpg){.illustration fig-align="center" width="85%"}
+
+</center>
+\
+<center>
+
+![**Devşirme (*the child levy*)**\
+Colored pencils and pen on paper (30 × 21 cm)\
+January 2021](artimg/devshirme.png){.illustration fig-align="center" width="760"}
+
+</center>
