@@ -6,7 +6,7 @@ Welcome - and thanks for visiting!
 
 I like to study how species are organized in time and space, with major focus on plants and their functional trait variation across various scales. My research approaches mainly involve the use of large databases and quantitative syntheses exploring shared patterns across different biomes and species.
 
-In this website you can check my [condensed scientific CV](/cv.html), some [R-related stuff](/Rtools.html), and a [few drawings and paintings](/art.html) of mine.
+In this website you can check my [condensed scientific CV](/cv.html) and some [R-related stuff](/Rtools.html).
 
 *N.B.: This website is still under development and may change in due course.*
 
