@@ -252,9 +252,9 @@ plot.inc.cor(dmatrix, cor.method='pearson', round.label.digit=2, size.label=3)
 
 ### 3. Calculate range elongation
 
-*updated (September 2023)*
+*updated (April 2024)*
 
-[**Disclaimer!** Please note that this content is a work in progress and has not undergone a formal peer review process yet. Therefore, it should be considered as preliminary information shared with individuals who intend to use it critically ;-)]{style="color:red;"}
+[**UPDATE!** You can download the `get_RLI` function]{style="color:red;"} [here](https://doi.org/10.6084/m9.figshare.23717421.v1). [For additional details, please refer to the tutorial below and to the main publication available online:]{style="color:red;"} [Midolo (2024)](https://doi.org/10.1111/geb.13838) [in *Global Ecology and Biogeography*.]{style="color:red;"}
 
 Species range shape refers to how a species' distribution differs from a perfectly symmetrical or isotropic pattern expected under neutral range dynamics. Some researchers have indeed proposed estimating shape elongation as a significant biogeographical species attribute (Rapoport, 1982; Brown et al., 1996; Pigot et al., 2010; Baselga et al., 2012; Castro-Insua et al., 2018).
 
@@ -267,21 +267,22 @@ Here is the code for the `get_RLI` function:
 ``` {.r style="max-height: 250px; overflow-y: auto;"}
 get_RLI <- function(range, # a multi polygons sf object of the species range
                     directional.constraint='none', # constraint the shortest path? default is none, use 'lon' or 'lat' to constrain the paths along longitude or latitude
-                    fragment.inclusivity = 0.1, # the lowest this value, the highest is the proportion of fragments considered for range calculation.
+                    fragment.inclusivity = 0.1, # the lowest this value, the highest is the proportion of fragments considered for range calculation. Lowest fragments 
                     columns.and.rows=100, # number of col and rows of the raster for each range fragment, increasing this number makes a raster with finer resolution, increasing considerably the amount of time!
                     direction = 8, # the 'directions' argument of the gdistance::transition() function. Values of 4, 8 and 16 are reccomended
                     graphical = T, # if T, plot the range with line objects (paths) used for RLI estimation
                     col.bl='red', # if graphical == T, the color of the final paths used for RLI estimation in the graph
                     very.graphical = F) # plot each fragment under examination and its candidate paths
-{
+  {
   st=Sys.time()
   
+  UTM32 = '+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs'
   orirange <- st_sf(range) # trasform to sf object
   st_geometry(orirange) <- 'geometry'
-  orirange <- st_transform(orirange, '+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs') #reproject to UTM zone 32
+  orirange <- st_transform(orirange, UTM32) #reproject to UTM zone 32
   rprp <- orirange %>% st_cast('POLYGON') # cast to POLYGON (= separating fragments)
   rprp$area <- as.numeric(st_area(rprp$geometry)) # calculate area for each fragment in m^2
-  rprp = rprp %>% arrange(area)
+  rprp = rprp %>% arrange(desc(area))
   rprp$adif <- rprp$area/max(rprp$area) # proportional area difference with the nmain range
   #exclude too small fragments:
   rprpo = rprp
@@ -296,7 +297,7 @@ get_RLI <- function(range, # a multi polygons sf object of the species range
     st.i <- Sys.time()
     
     polyi <- rprp[frag,]
-    #apply Behrman transformation, lon_0 set depending upon longitudinal extension (correcting for distortion)
+    #apply Behrman transofmration, lon_0 set depending upon longitudinal extension (correcting for distortion)
     polyi = st_transform(polyi, crs = '+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +ellps=WGS84 +units=m +no_defs')
     if(round(abs(min(st_coordinates(polyi)[,1]))) == round(abs(max(st_coordinates(polyi)[,1])))){
       polyi = st_transform(rprp[frag,], crs = '+proj=cea +lon_0=10 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +ellps=WGS84 +units=m +no_defs')
@@ -373,7 +374,7 @@ get_RLI <- function(range, # a multi polygons sf object of the species range
     rallyrasters_spatial <- rallyrasters %>% st_as_sf(coords = c('X','Y'), crs=crs.polyi)
     
     #3. force misplaced points towards raster, if needed
-    check.allocation <- extract(playground,rallyrasters_spatial)
+    check.allocation <- raster::extract(playground,rallyrasters_spatial)
     if (any(is.na(check.allocation))){
       badpoints <- rallyrasters[is.na(check.allocation),] %>% st_as_sf(coords=c('X','Y'))
       for (k in 1:nrow(badpoints)) {
@@ -416,11 +417,14 @@ get_RLI <- function(range, # a multi polygons sf object of the species range
     lunghezze <- vector()
     for (l in 1:nrow(egrid)) {
       linee[[l]] <- gdistance::shortestPath(tr1, 
-                                            as.numeric(egrid[l,1]),
-                                            as.numeric(egrid[l,2]),
-                                            output="SpatialLines") %>% st_as_sf()
-      if(very.graphical){plot(linee[[l]], add=T, col=vcol[l],lwd=2, lty=1)}
-      linee[[l]] <- linee[[l]] %>% st_transform(crs = st_crs(orirange))
+                                    as.numeric(egrid[l,1]),
+                                    as.numeric(egrid[l,2]),
+                                    output="SpatialLines") %>%
+        st_as_sf() %>%
+        st_set_crs(tr1@srs) %>%
+        st_transform(st_crs(orirange))
+      
+      if(very.graphical){plot(linee[[l]] %>% st_transform(crs(playground)), add=T, col=vcol[l],lwd=2, lty=1)}
       lunghezze[l] <- as.numeric(st_length(linee[[l]]))
     }
     
@@ -430,7 +434,7 @@ get_RLI <- function(range, # a multi polygons sf object of the species range
     which.best.line <- c(which(lunghezze == I.stat))
     bl.id <- ifelse(length(which.best.line) == 1, which.best.line, sample(which.best.line,1))
     bl <- linee[[bl.id]]
-    
+
     sentieri[[frag]] <- list(
       best.path = bl,
       df = data.frame(fragment=frag, I=I.stat, A=a, RLI = as.numeric(I.stat)^2/a)
@@ -563,7 +567,7 @@ Brown, J. H., Stevens, G. C., & Kaufman, D. M. (1996). The Geographic Range: Siz
 
 Castro‐Insua, A., Gómez‐Rodríguez, C., Svenning, J. C., & Baselga, A. (2018). A new macroecological pattern: The latitudinal gradient in species range shape. *Global Ecology and Biogeography*, *27*(3), 357-367.
 
-​Caudullo, G., Welk, E., & San-Miguel-Ayanz, J. (2017). Chorological maps for the main European woody species. *Data in Brief*, 12, 662–666. 
+​Caudullo, G., Welk, E., & San-Miguel-Ayanz, J. (2017). Chorological maps for the main European woody species. *Data in Brief*, 12, 662–666.
 
 ​Graves, G. R. (1988). Linearity of Geographic Range and Its Possible Effect on the Population Structure of Andean Birds. *The Auk*, 105(1), 47--52. 
 

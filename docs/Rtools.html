@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -90,7 +90,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -128,10 +129,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link active" href="./Rtools.html" rel="" target="" aria-current="page">
  <span class="menu-text">R codes</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./art.html" rel="" target="">
- <span class="menu-text">Drawings and Paintings</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -406,8 +403,8 @@ Here are the functions that you can load in your environment to easily produce t
 </section>
 <section id="calculate-range-elongation" class="level3">
 <h3 class="anchored" data-anchor-id="calculate-range-elongation">3. Calculate range elongation</h3>
-<p><em>updated (September 2023)</em></p>
-<p><span style="color:red;"><strong>Disclaimer!</strong> Please note that this content is a work in progress and has not undergone a formal peer review process yet. Therefore, it should be considered as preliminary information shared with individuals who intend to use it critically ;-)</span></p>
+<p><em>updated (April 2024)</em></p>
+<p><span style="color:red;"><strong>UPDATE!</strong> You can download the <code>get_RLI</code> function</span> <a href="https://doi.org/10.6084/m9.figshare.23717421.v1">here</a>. <span style="color:red;">For additional details, please refer to the tutorial below and to the main publication available online:</span> <a href="https://doi.org/10.1111/geb.13838">Midolo (2024)</a> <span style="color:red;">in <em>Global Ecology and Biogeography</em>.</span></p>
 <p>Species range shape refers to how a species’ distribution differs from a perfectly symmetrical or isotropic pattern expected under neutral range dynamics. Some researchers have indeed proposed estimating shape elongation as a significant biogeographical species attribute (Rapoport, 1982; Brown et al., 1996; Pigot et al., 2010; Baselga et al., 2012; Castro-Insua et al., 2018).</p>
 <p>Here I share an R code (= the <code>get_RLI</code> function) to calculate a metric similar to what described as the Range Linearity Index (RLI) by <a href="https://doi.org/10.1111/j.1461-0248.2010.01462.x">Pigot et al.&nbsp;(2010)</a>. The RLI is a dimensionless measure calculated as RLI = <em>l</em><sup>2</sup> / <em>a</em>, where <em>l</em> represents the maximum linear dimension, and <em>a</em> represents the area of the polygon. To compute the <em>l</em> metric, we will determine the longest length among the shortest paths connecting all possible combinations of the westernmost, easternmost, northernmost, and southernmost geographical points at the extremes of each polygon. As a result, the RLI offers an intuitive way to quantify shape elongation, analogous to the long axis to width ratio (Graves 1988; Pigot et al.&nbsp;2010). For example, an RLI value of 2 indicates a shape that is twice as long as it is wide.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -419,196 +416,200 @@ Here are the functions that you can load in your environment to easily produce t
 <p>Here is the code for the <code>get_RLI</code> function:</p>
 <div class="sourceCode" id="cb7" style="max-height: 250px; overflow-y: auto;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>get_RLI <span class="ot">&lt;-</span> <span class="cf">function</span>(range, <span class="co"># a multi polygons sf object of the species range</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">directional.constraint=</span><span class="st">'none'</span>, <span class="co"># constraint the shortest path? default is none, use 'lon' or 'lat' to constrain the paths along longitude or latitude</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">fragment.inclusivity =</span> <span class="fl">0.1</span>, <span class="co"># the lowest this value, the highest is the proportion of fragments considered for range calculation.</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">fragment.inclusivity =</span> <span class="fl">0.1</span>, <span class="co"># the lowest this value, the highest is the proportion of fragments considered for range calculation. Lowest fragments </span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">columns.and.rows=</span><span class="dv">100</span>, <span class="co"># number of col and rows of the raster for each range fragment, increasing this number makes a raster with finer resolution, increasing considerably the amount of time!</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">direction =</span> <span class="dv">8</span>, <span class="co"># the 'directions' argument of the gdistance::transition() function. Values of 4, 8 and 16 are reccomended</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">graphical =</span> T, <span class="co"># if T, plot the range with line objects (paths) used for RLI estimation</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col.bl=</span><span class="st">'red'</span>, <span class="co"># if graphical == T, the color of the final paths used for RLI estimation in the graph</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">very.graphical =</span> F) <span class="co"># plot each fragment under examination and its candidate paths</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  {</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  st<span class="ot">=</span><span class="fu">Sys.time</span>()</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  orirange <span class="ot">&lt;-</span> <span class="fu">st_sf</span>(range) <span class="co"># trasform to sf object</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_geometry</span>(orirange) <span class="ot">&lt;-</span> <span class="st">'geometry'</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  orirange <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(orirange, <span class="st">'+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs'</span>) <span class="co">#reproject to UTM zone 32</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  rprp <span class="ot">&lt;-</span> orirange <span class="sc">%&gt;%</span> <span class="fu">st_cast</span>(<span class="st">'POLYGON'</span>) <span class="co"># cast to POLYGON (= separating fragments)</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  rprp<span class="sc">$</span>area <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">st_area</span>(rprp<span class="sc">$</span>geometry)) <span class="co"># calculate area for each fragment in m^2</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  rprp <span class="ot">=</span> rprp <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(area)</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  rprp<span class="sc">$</span>adif <span class="ot">&lt;-</span> rprp<span class="sc">$</span>area<span class="sc">/</span><span class="fu">max</span>(rprp<span class="sc">$</span>area) <span class="co"># proportional area difference with the nmain range</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">#exclude too small fragments:</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  rprpo <span class="ot">=</span> rprp</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  rprp <span class="ot">=</span> rprp[rprp<span class="sc">$</span>adif<span class="sc">&gt;=</span>fragment.inclusivity,]</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  rprp<span class="sc">$</span>id <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(rprp)</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">'Assessing '</span>,<span class="fu">nrow</span>(rprp),<span class="st">' range fragments out of '</span>, <span class="fu">nrow</span>(rprpo)))</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  sentieri <span class="ot">&lt;-</span> <span class="fu">list</span>() <span class="co">#list where to store fragments' RLI stats</span></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (frag <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(rprp)) {</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    st.i <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    polyi <span class="ot">&lt;-</span> rprp[frag,]</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">#apply Behrman transformation, lon_0 set depending upon longitudinal extension (correcting for distortion)</span></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    polyi <span class="ot">=</span> <span class="fu">st_transform</span>(polyi, <span class="at">crs =</span> <span class="st">'+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +ellps=WGS84 +units=m +no_defs'</span>)</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">round</span>(<span class="fu">abs</span>(<span class="fu">min</span>(<span class="fu">st_coordinates</span>(polyi)[,<span class="dv">1</span>]))) <span class="sc">==</span> <span class="fu">round</span>(<span class="fu">abs</span>(<span class="fu">max</span>(<span class="fu">st_coordinates</span>(polyi)[,<span class="dv">1</span>])))){</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>      polyi <span class="ot">=</span> <span class="fu">st_transform</span>(rprp[frag,], <span class="at">crs =</span> <span class="st">'+proj=cea +lon_0=10 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +ellps=WGS84 +units=m +no_defs'</span>)</span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    crs.polyi <span class="ot">&lt;-</span> <span class="fu">crs</span>(<span class="fu">as_Spatial</span>(polyi))</span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    poly.grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(polyi, <span class="at">n=</span><span class="fu">rep</span>(columns.and.rows,<span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">row.id =</span> <span class="fu">row_number</span>())</span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    defaultW <span class="ot">&lt;-</span> <span class="fu">getOption</span>(<span class="st">"warn"</span>)</span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="co">#1. define the area where the line can pass through (= 'playground')</span></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">options</span>(<span class="at">warn =</span> <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    playground <span class="ot">&lt;-</span> poly.grid <span class="sc">%&gt;%</span></span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>      <span class="fu">left_join</span>(</span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>        <span class="fu">as.data.frame</span>(<span class="fu">st_intersects</span>(poly.grid,polyi))<span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="at">value =</span> col.id),<span class="st">'row.id'</span></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>row.id) <span class="sc">%&gt;%</span></span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_cast</span>(<span class="st">'POINT'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_Spatial</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>      <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">'z'</span>,<span class="st">'x'</span>,<span class="st">'y'</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(x,y,z) <span class="sc">%&gt;%</span></span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rasterFromXYZ</span>(<span class="at">crs =</span> crs.polyi)</span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">options</span>(<span class="at">warn =</span> defaultW)</span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot:</span></span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(very.graphical) {<span class="fu">plot</span>(playground, <span class="at">col=</span><span class="st">'grey'</span>,<span class="at">main=</span><span class="fu">paste0</span>(<span class="st">'fragment n. '</span>,frag),<span class="at">legend=</span>F)}</span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  UTM32 <span class="ot">=</span> <span class="st">'+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs'</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  orirange <span class="ot">&lt;-</span> <span class="fu">st_sf</span>(range) <span class="co"># trasform to sf object</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_geometry</span>(orirange) <span class="ot">&lt;-</span> <span class="st">'geometry'</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  orirange <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(orirange, UTM32) <span class="co">#reproject to UTM zone 32</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  rprp <span class="ot">&lt;-</span> orirange <span class="sc">%&gt;%</span> <span class="fu">st_cast</span>(<span class="st">'POLYGON'</span>) <span class="co"># cast to POLYGON (= separating fragments)</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  rprp<span class="sc">$</span>area <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">st_area</span>(rprp<span class="sc">$</span>geometry)) <span class="co"># calculate area for each fragment in m^2</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  rprp <span class="ot">=</span> rprp <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(area))</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  rprp<span class="sc">$</span>adif <span class="ot">&lt;-</span> rprp<span class="sc">$</span>area<span class="sc">/</span><span class="fu">max</span>(rprp<span class="sc">$</span>area) <span class="co"># proportional area difference with the nmain range</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">#exclude too small fragments:</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  rprpo <span class="ot">=</span> rprp</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  rprp <span class="ot">=</span> rprp[rprp<span class="sc">$</span>adif<span class="sc">&gt;=</span>fragment.inclusivity,]</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  rprp<span class="sc">$</span>id <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(rprp)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">'Assessing '</span>,<span class="fu">nrow</span>(rprp),<span class="st">' range fragments out of '</span>, <span class="fu">nrow</span>(rprpo)))</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  sentieri <span class="ot">&lt;-</span> <span class="fu">list</span>() <span class="co">#list where to store fragments' RLI stats</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (frag <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(rprp)) {</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    st.i <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    polyi <span class="ot">&lt;-</span> rprp[frag,]</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">#apply Behrman transofmration, lon_0 set depending upon longitudinal extension (correcting for distortion)</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    polyi <span class="ot">=</span> <span class="fu">st_transform</span>(polyi, <span class="at">crs =</span> <span class="st">'+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +ellps=WGS84 +units=m +no_defs'</span>)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">round</span>(<span class="fu">abs</span>(<span class="fu">min</span>(<span class="fu">st_coordinates</span>(polyi)[,<span class="dv">1</span>]))) <span class="sc">==</span> <span class="fu">round</span>(<span class="fu">abs</span>(<span class="fu">max</span>(<span class="fu">st_coordinates</span>(polyi)[,<span class="dv">1</span>])))){</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>      polyi <span class="ot">=</span> <span class="fu">st_transform</span>(rprp[frag,], <span class="at">crs =</span> <span class="st">'+proj=cea +lon_0=10 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +ellps=WGS84 +units=m +no_defs'</span>)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    crs.polyi <span class="ot">&lt;-</span> <span class="fu">crs</span>(<span class="fu">as_Spatial</span>(polyi))</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    poly.grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(polyi, <span class="at">n=</span><span class="fu">rep</span>(columns.and.rows,<span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">row.id =</span> <span class="fu">row_number</span>())</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>    defaultW <span class="ot">&lt;-</span> <span class="fu">getOption</span>(<span class="st">"warn"</span>)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="co">#1. define the area where the line can pass through (= 'playground')</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">options</span>(<span class="at">warn =</span> <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>    playground <span class="ot">&lt;-</span> poly.grid <span class="sc">%&gt;%</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">left_join</span>(</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>        <span class="fu">as.data.frame</span>(<span class="fu">st_intersects</span>(poly.grid,polyi))<span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="at">value =</span> col.id),<span class="st">'row.id'</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>row.id) <span class="sc">%&gt;%</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_cast</span>(<span class="st">'POINT'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_Spatial</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">'z'</span>,<span class="st">'x'</span>,<span class="st">'y'</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(x,y,z) <span class="sc">%&gt;%</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rasterFromXYZ</span>(<span class="at">crs =</span> crs.polyi)</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">options</span>(<span class="at">warn =</span> defaultW)</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot:</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(very.graphical) {<span class="fu">plot</span>(playground, <span class="at">col=</span><span class="st">'grey'</span>,<span class="at">main=</span><span class="fu">paste0</span>(<span class="st">'fragment n. '</span>,frag),<span class="at">legend=</span>F)}</span>
 <span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    <span class="co">#2. define the start/arrival point cells (= 'rallypoints')</span></span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>    coord <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(polyi) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">options</span>(<span class="at">warn =</span> <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>    rallypoints <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>      <span class="at">southernmost =</span> coord[<span class="fu">which.min</span>(coord[, <span class="st">"Y"</span>]), ],</span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>      <span class="at">northernmost =</span> coord[<span class="fu">which.max</span>(coord[, <span class="st">"Y"</span>]), ],</span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>      <span class="at">easternmost =</span> coord[<span class="fu">which.max</span>(coord[, <span class="st">"X"</span>]), ],</span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">westernmost =</span> coord[<span class="fu">which.min</span>(coord[, <span class="st">"X"</span>]), ]</span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>      <span class="fu">bind_rows</span>(<span class="at">.id=</span><span class="st">'flag'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">"X"</span>,<span class="st">"Y"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(polyi)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(flag,geometry)</span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    raster.cooord <span class="ot">&lt;-</span> poly.grid <span class="sc">%&gt;%</span></span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>      <span class="fu">left_join</span>(</span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>        <span class="fu">as.data.frame</span>(<span class="fu">st_intersects</span>(poly.grid,rallypoints))<span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="at">value =</span> col.id),<span class="st">'row.id'</span></span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(value)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>row.id) <span class="sc">%&gt;%</span></span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_centroid</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>      st_coordinates <span class="sc">%&gt;%</span></span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.data.frame</span>()</span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>    rallyrasters <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>      <span class="at">southernmost =</span> raster.cooord[<span class="fu">which.min</span>(raster.cooord[, <span class="st">"Y"</span>]), ],</span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>      <span class="at">northernmost =</span> raster.cooord[<span class="fu">which.max</span>(raster.cooord[, <span class="st">"Y"</span>]), ],</span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>      <span class="at">easternmost =</span> raster.cooord[<span class="fu">which.max</span>(raster.cooord[, <span class="st">"X"</span>]), ],</span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>      <span class="at">westernmost =</span> raster.cooord[<span class="fu">which.min</span>(raster.cooord[, <span class="st">"X"</span>]), ]</span>
-<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>      <span class="fu">bind_rows</span>(<span class="at">.id=</span><span class="st">'flag'</span>)</span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>    <span class="fu">options</span>(<span class="at">warn =</span> defaultW)</span>
-<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(directional.constraint <span class="sc">==</span> <span class="st">'lon'</span>) {</span>
-<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>      rallyrasters <span class="ot">&lt;-</span> rallyrasters <span class="sc">%&gt;%</span> <span class="fu">filter</span>(flag <span class="sc">==</span> <span class="st">'easternmost'</span> <span class="sc">|</span> flag <span class="sc">==</span> <span class="st">'westernmost'</span>)</span>
-<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(directional.constraint <span class="sc">==</span> <span class="st">'lat'</span>) {</span>
-<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>      rallyrasters <span class="ot">&lt;-</span> rallyrasters <span class="sc">%&gt;%</span> <span class="fu">filter</span>(flag <span class="sc">==</span> <span class="st">'southernmost'</span> <span class="sc">|</span> flag <span class="sc">==</span> <span class="st">'northernmost'</span>)</span>
-<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>    rallyrasters_spatial <span class="ot">&lt;-</span> rallyrasters <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">'X'</span>,<span class="st">'Y'</span>), <span class="at">crs=</span>crs.polyi)</span>
-<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>    <span class="co">#3. force misplaced points towards raster, if needed</span></span>
-<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>    check.allocation <span class="ot">&lt;-</span> <span class="fu">extract</span>(playground,rallyrasters_spatial)</span>
-<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">is.na</span>(check.allocation))){</span>
-<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>      badpoints <span class="ot">&lt;-</span> rallyrasters[<span class="fu">is.na</span>(check.allocation),] <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">'X'</span>,<span class="st">'Y'</span>))</span>
-<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(badpoints)) {</span>
-<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>        vvo <span class="ot">&lt;-</span> <span class="fu">rasterToPoints</span>(playground) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(z))</span>
-<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>        vv <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(vvo,<span class="at">coords=</span><span class="fu">c</span>(<span class="st">'x'</span>,<span class="st">'y'</span>))</span>
-<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>        vv<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(vv<span class="sc">$</span>geometry, badpoints[k,]<span class="sc">$</span>geometry)</span>
-<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>        new.alloc <span class="ot">&lt;-</span> vvo[<span class="fu">which</span>(vv<span class="sc">$</span>dist <span class="sc">==</span> <span class="fu">min</span>(vv<span class="sc">$</span>dist)),] <span class="sc">%&gt;%</span> <span class="fu">sample_n</span>(<span class="dv">1</span>)</span>
-<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>        rallyrasters[<span class="fu">is.na</span>(check.allocation),][,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>][k,]<span class="sc">$</span>X <span class="ot">=</span> new.alloc<span class="sc">$</span>x</span>
-<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>        rallyrasters[<span class="fu">is.na</span>(check.allocation),][,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>][k,]<span class="sc">$</span>Y <span class="ot">=</span> new.alloc<span class="sc">$</span>y</span>
-<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>      }}</span>
-<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>    rallyrasters_spatial <span class="ot">&lt;-</span> rallyrasters <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">'X'</span>,<span class="st">'Y'</span>), <span class="at">crs=</span>crs.polyi)</span>
-<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(very.graphical) {</span>
-<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>      rallyrasters_spatial<span class="sc">$</span>flagcol <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">'grey30'</span>,<span class="dv">4</span>))[<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(rallyrasters)]</span>
-<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>      <span class="fu">plot</span>(rallyrasters_spatial, <span class="at">col=</span>rallyrasters_spatial<span class="sc">$</span>flagcol,<span class="at">add=</span>T,<span class="at">legend=</span>F, <span class="at">pch=</span><span class="dv">16</span>)</span>
-<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>    thepoints2test <span class="ot">&lt;-</span> rallyrasters[,<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>    thepoints2test<span class="sc">$</span>id <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(thepoints2test)</span>
-<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>    egrid_unique.combs <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(<span class="fu">combn</span>(thepoints2test<span class="sc">$</span>id,<span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>      <span class="fu">bind_rows</span>(<span class="fu">data.frame</span>(<span class="at">V1=</span>thepoints2test<span class="sc">$</span>id,<span class="at">V2=</span>thepoints2test<span class="sc">$</span>id)) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>      <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">'n1'</span>,<span class="st">'n2'</span>)) <span class="co">#a non-redundant version of expand_grid</span></span>
-<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>    egrid <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
-<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>      <span class="fu">expand_grid</span>(<span class="at">n1=</span>thepoints2test<span class="sc">$</span>id, <span class="at">n2=</span>thepoints2test<span class="sc">$</span>id),</span>
-<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>      <span class="fu">expand_grid</span>(<span class="at">d1=</span><span class="fu">cbind</span>(thepoints2test<span class="sc">$</span>X,thepoints2test<span class="sc">$</span>Y), <span class="at">d2=</span><span class="fu">cbind</span>(thepoints2test<span class="sc">$</span>X,thepoints2test<span class="sc">$</span>Y))</span>
-<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>      <span class="fu">semi_join</span>(egrid_unique.combs, <span class="at">by=</span><span class="fu">c</span>(<span class="st">'n1'</span>,<span class="st">'n2'</span>))<span class="sc">%&gt;%</span> <span class="co">#a non-redundant tibble of pairwise combinations</span></span>
-<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(n1<span class="sc">!=</span>n2)</span>
-<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>    egrid <span class="ot">&lt;-</span> egrid[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)]</span>
-<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>    tr1 <span class="ot">&lt;-</span> gdistance<span class="sc">::</span><span class="fu">transition</span>(playground, <span class="at">transitionFunction=</span>mean, <span class="at">directions=</span>direction)</span>
-<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>    tr1 <span class="ot">&lt;-</span> gdistance<span class="sc">::</span><span class="fu">geoCorrection</span>(tr1,<span class="st">'c'</span>)</span>
-<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>    <span class="co">#start detecting the possible paths...</span></span>
-<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(very.graphical) {vcol <span class="ot">&lt;-</span> viridis<span class="sc">::</span><span class="fu">viridis</span>(<span class="fu">nrow</span>(egrid),<span class="at">direction =</span> <span class="dv">1</span>)}</span>
-<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>    linee <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>    lunghezze <span class="ot">&lt;-</span> <span class="fu">vector</span>()</span>
-<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(egrid)) {</span>
-<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>      linee[[l]] <span class="ot">&lt;-</span> gdistance<span class="sc">::</span><span class="fu">shortestPath</span>(tr1, </span>
-<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">as.numeric</span>(egrid[l,<span class="dv">1</span>]),</span>
-<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">as.numeric</span>(egrid[l,<span class="dv">2</span>]),</span>
-<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">output=</span><span class="st">"SpatialLines"</span>) <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>()</span>
-<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span>(very.graphical){<span class="fu">plot</span>(linee[[l]], <span class="at">add=</span>T, <span class="at">col=</span>vcol[l],<span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span>)}</span>
-<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>      linee[[l]] <span class="ot">&lt;-</span> linee[[l]] <span class="sc">%&gt;%</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(orirange))</span>
-<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>      lunghezze[l] <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">st_length</span>(linee[[l]]))</span>
-<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>    I.stat <span class="ot">&lt;-</span> <span class="fu">max</span>(lunghezze)</span>
-<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>    a <span class="ot">&lt;-</span> polyi<span class="sc">$</span>area</span>
-<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>    which.best.line <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">which</span>(lunghezze <span class="sc">==</span> I.stat))</span>
-<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>    bl.id <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">length</span>(which.best.line) <span class="sc">==</span> <span class="dv">1</span>, which.best.line, <span class="fu">sample</span>(which.best.line,<span class="dv">1</span>))</span>
-<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>    bl <span class="ot">&lt;-</span> linee[[bl.id]]</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>    <span class="co">#2. define the start/arrival point cells (= 'rallypoints')</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>    coord <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(polyi) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>    <span class="fu">options</span>(<span class="at">warn =</span> <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    rallypoints <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>      <span class="at">southernmost =</span> coord[<span class="fu">which.min</span>(coord[, <span class="st">"Y"</span>]), ],</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>      <span class="at">northernmost =</span> coord[<span class="fu">which.max</span>(coord[, <span class="st">"Y"</span>]), ],</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">easternmost =</span> coord[<span class="fu">which.max</span>(coord[, <span class="st">"X"</span>]), ],</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">westernmost =</span> coord[<span class="fu">which.min</span>(coord[, <span class="st">"X"</span>]), ]</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>      <span class="fu">bind_rows</span>(<span class="at">.id=</span><span class="st">'flag'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">"X"</span>,<span class="st">"Y"</span>), <span class="at">crs =</span> <span class="fu">st_crs</span>(polyi)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(flag,geometry)</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>    raster.cooord <span class="ot">&lt;-</span> poly.grid <span class="sc">%&gt;%</span></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>      <span class="fu">left_join</span>(</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>        <span class="fu">as.data.frame</span>(<span class="fu">st_intersects</span>(poly.grid,rallypoints))<span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="at">value =</span> col.id),<span class="st">'row.id'</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(value)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>row.id) <span class="sc">%&gt;%</span></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_centroid</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>      st_coordinates <span class="sc">%&gt;%</span></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.data.frame</span>()</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>    rallyrasters <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>      <span class="at">southernmost =</span> raster.cooord[<span class="fu">which.min</span>(raster.cooord[, <span class="st">"Y"</span>]), ],</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>      <span class="at">northernmost =</span> raster.cooord[<span class="fu">which.max</span>(raster.cooord[, <span class="st">"Y"</span>]), ],</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>      <span class="at">easternmost =</span> raster.cooord[<span class="fu">which.max</span>(raster.cooord[, <span class="st">"X"</span>]), ],</span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>      <span class="at">westernmost =</span> raster.cooord[<span class="fu">which.min</span>(raster.cooord[, <span class="st">"X"</span>]), ]</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>      <span class="fu">bind_rows</span>(<span class="at">.id=</span><span class="st">'flag'</span>)</span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>    <span class="fu">options</span>(<span class="at">warn =</span> defaultW)</span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(directional.constraint <span class="sc">==</span> <span class="st">'lon'</span>) {</span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>      rallyrasters <span class="ot">&lt;-</span> rallyrasters <span class="sc">%&gt;%</span> <span class="fu">filter</span>(flag <span class="sc">==</span> <span class="st">'easternmost'</span> <span class="sc">|</span> flag <span class="sc">==</span> <span class="st">'westernmost'</span>)</span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(directional.constraint <span class="sc">==</span> <span class="st">'lat'</span>) {</span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>      rallyrasters <span class="ot">&lt;-</span> rallyrasters <span class="sc">%&gt;%</span> <span class="fu">filter</span>(flag <span class="sc">==</span> <span class="st">'southernmost'</span> <span class="sc">|</span> flag <span class="sc">==</span> <span class="st">'northernmost'</span>)</span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>    rallyrasters_spatial <span class="ot">&lt;-</span> rallyrasters <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">'X'</span>,<span class="st">'Y'</span>), <span class="at">crs=</span>crs.polyi)</span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>    <span class="co">#3. force misplaced points towards raster, if needed</span></span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>    check.allocation <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">extract</span>(playground,rallyrasters_spatial)</span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">is.na</span>(check.allocation))){</span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>      badpoints <span class="ot">&lt;-</span> rallyrasters[<span class="fu">is.na</span>(check.allocation),] <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">'X'</span>,<span class="st">'Y'</span>))</span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(badpoints)) {</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>        vvo <span class="ot">&lt;-</span> <span class="fu">rasterToPoints</span>(playground) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(z))</span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>        vv <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(vvo,<span class="at">coords=</span><span class="fu">c</span>(<span class="st">'x'</span>,<span class="st">'y'</span>))</span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>        vv<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(vv<span class="sc">$</span>geometry, badpoints[k,]<span class="sc">$</span>geometry)</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>        new.alloc <span class="ot">&lt;-</span> vvo[<span class="fu">which</span>(vv<span class="sc">$</span>dist <span class="sc">==</span> <span class="fu">min</span>(vv<span class="sc">$</span>dist)),] <span class="sc">%&gt;%</span> <span class="fu">sample_n</span>(<span class="dv">1</span>)</span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>        rallyrasters[<span class="fu">is.na</span>(check.allocation),][,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>][k,]<span class="sc">$</span>X <span class="ot">=</span> new.alloc<span class="sc">$</span>x</span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>        rallyrasters[<span class="fu">is.na</span>(check.allocation),][,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>][k,]<span class="sc">$</span>Y <span class="ot">=</span> new.alloc<span class="sc">$</span>y</span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>      }}</span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>    rallyrasters_spatial <span class="ot">&lt;-</span> rallyrasters <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">'X'</span>,<span class="st">'Y'</span>), <span class="at">crs=</span>crs.polyi)</span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(very.graphical) {</span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>      rallyrasters_spatial<span class="sc">$</span>flagcol <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">'grey30'</span>,<span class="dv">4</span>))[<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(rallyrasters)]</span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>      <span class="fu">plot</span>(rallyrasters_spatial, <span class="at">col=</span>rallyrasters_spatial<span class="sc">$</span>flagcol,<span class="at">add=</span>T,<span class="at">legend=</span>F, <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>    thepoints2test <span class="ot">&lt;-</span> rallyrasters[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>    thepoints2test<span class="sc">$</span>id <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(thepoints2test)</span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>    egrid_unique.combs <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(<span class="fu">combn</span>(thepoints2test<span class="sc">$</span>id,<span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>      <span class="fu">bind_rows</span>(<span class="fu">data.frame</span>(<span class="at">V1=</span>thepoints2test<span class="sc">$</span>id,<span class="at">V2=</span>thepoints2test<span class="sc">$</span>id)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>      <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">'n1'</span>,<span class="st">'n2'</span>)) <span class="co">#a non-redundant version of expand_grid</span></span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>    egrid <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>      <span class="fu">expand_grid</span>(<span class="at">n1=</span>thepoints2test<span class="sc">$</span>id, <span class="at">n2=</span>thepoints2test<span class="sc">$</span>id),</span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>      <span class="fu">expand_grid</span>(<span class="at">d1=</span><span class="fu">cbind</span>(thepoints2test<span class="sc">$</span>X,thepoints2test<span class="sc">$</span>Y), <span class="at">d2=</span><span class="fu">cbind</span>(thepoints2test<span class="sc">$</span>X,thepoints2test<span class="sc">$</span>Y))</span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>      <span class="fu">semi_join</span>(egrid_unique.combs, <span class="at">by=</span><span class="fu">c</span>(<span class="st">'n1'</span>,<span class="st">'n2'</span>))<span class="sc">%&gt;%</span> <span class="co">#a non-redundant tibble of pairwise combinations</span></span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(n1<span class="sc">!=</span>n2)</span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>    egrid <span class="ot">&lt;-</span> egrid[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)]</span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>    tr1 <span class="ot">&lt;-</span> gdistance<span class="sc">::</span><span class="fu">transition</span>(playground, <span class="at">transitionFunction=</span>mean, <span class="at">directions=</span>direction)</span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>    tr1 <span class="ot">&lt;-</span> gdistance<span class="sc">::</span><span class="fu">geoCorrection</span>(tr1,<span class="st">'c'</span>)</span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>    <span class="co">#start detecting the possible paths...</span></span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(very.graphical) {vcol <span class="ot">&lt;-</span> viridis<span class="sc">::</span><span class="fu">viridis</span>(<span class="fu">nrow</span>(egrid),<span class="at">direction =</span> <span class="dv">1</span>)}</span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>    linee <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>    lunghezze <span class="ot">&lt;-</span> <span class="fu">vector</span>()</span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(egrid)) {</span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>      linee[[l]] <span class="ot">&lt;-</span> gdistance<span class="sc">::</span><span class="fu">shortestPath</span>(tr1, </span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">as.numeric</span>(egrid[l,<span class="dv">1</span>]),</span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">as.numeric</span>(egrid[l,<span class="dv">2</span>]),</span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">output=</span><span class="st">"SpatialLines"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>        <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>        <span class="fu">st_set_crs</span>(tr1<span class="sc">@</span>srs) <span class="sc">%&gt;%</span></span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>        <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(orirange))</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span>(very.graphical){<span class="fu">plot</span>(linee[[l]] <span class="sc">%&gt;%</span> <span class="fu">st_transform</span>(<span class="fu">crs</span>(playground)), <span class="at">add=</span>T, <span class="at">col=</span>vcol[l],<span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span>)}</span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>      lunghezze[l] <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">st_length</span>(linee[[l]]))</span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>    I.stat <span class="ot">&lt;-</span> <span class="fu">max</span>(lunghezze)</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>    a <span class="ot">&lt;-</span> polyi<span class="sc">$</span>area</span>
 <span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>    sentieri[[frag]] <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>      <span class="at">best.path =</span> bl,</span>
-<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>      <span class="at">df =</span> <span class="fu">data.frame</span>(<span class="at">fragment=</span>frag, <span class="at">I=</span>I.stat, <span class="at">A=</span>a, <span class="at">RLI =</span> <span class="fu">as.numeric</span>(I.stat)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>a)</span>
-<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>    cati <span class="ot">=</span> <span class="fu">str_pad</span>(frag,<span class="fu">nchar</span>(<span class="fu">nrow</span>(rprp)),<span class="at">side=</span><span class="st">'left'</span>,<span class="at">pad=</span><span class="st">'0'</span>)</span>
-<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>    et.i <span class="ot">=</span> <span class="fu">Sys.time</span>() <span class="sc">-</span> st.i</span>
-<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">'Fragment '</span>,cati,<span class="st">' time: '</span>,<span class="fu">paste</span>(<span class="fu">round</span>(et.i,<span class="dv">2</span>)),<span class="st">' '</span>,<span class="fu">attr</span>(et.i,<span class="st">'units'</span>))</span>
-<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">=</span> <span class="fu">list</span>(</span>
-<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>    <span class="at">RLI.vals =</span> <span class="fu">bind_rows</span>(purrr<span class="sc">::</span><span class="fu">map</span>(sentieri, <span class="cf">function</span>(x){x<span class="sc">$</span>df})),</span>
-<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>    <span class="at">RLI.lins =</span> <span class="fu">bind_rows</span>(purrr<span class="sc">::</span><span class="fu">map</span>(sentieri, <span class="cf">function</span>(x){<span class="fu">st_sf</span>(x<span class="sc">$</span>best.path)}))</span>
-<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(graphical){</span>
-<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(<span class="fu">as_Spatial</span>(orirange), <span class="at">col=</span><span class="st">'black'</span>, <span class="at">border=</span><span class="cn">NA</span>)</span>
-<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(<span class="fu">as_Spatial</span>(rprp),<span class="at">col=</span><span class="st">'darkolivegreen3'</span>,<span class="at">add=</span>T,<span class="at">border=</span><span class="cn">NA</span>)</span>
-<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(out<span class="sc">$</span>RLI.lins, <span class="at">col=</span>col.bl, <span class="at">add=</span>T, <span class="at">lwd=</span><span class="dv">3</span>)</span>
-<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>  et<span class="ot">=</span><span class="fu">Sys.time</span>()<span class="sc">-</span>st</span>
-<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="fu">paste0</span>(<span class="st">'... DONE! Total elapsed time: '</span>,<span class="fu">paste</span>(<span class="fu">round</span>(et,<span class="dv">2</span>)),<span class="st">' '</span>,<span class="fu">attr</span>(et,<span class="st">'units'</span>)))</span>
-<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(out)</span>
-<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>    which.best.line <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">which</span>(lunghezze <span class="sc">==</span> I.stat))</span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>    bl.id <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">length</span>(which.best.line) <span class="sc">==</span> <span class="dv">1</span>, which.best.line, <span class="fu">sample</span>(which.best.line,<span class="dv">1</span>))</span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>    bl <span class="ot">&lt;-</span> linee[[bl.id]]</span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>    sentieri[[frag]] <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>      <span class="at">best.path =</span> bl,</span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>      <span class="at">df =</span> <span class="fu">data.frame</span>(<span class="at">fragment=</span>frag, <span class="at">I=</span>I.stat, <span class="at">A=</span>a, <span class="at">RLI =</span> <span class="fu">as.numeric</span>(I.stat)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>a)</span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>    cati <span class="ot">=</span> <span class="fu">str_pad</span>(frag,<span class="fu">nchar</span>(<span class="fu">nrow</span>(rprp)),<span class="at">side=</span><span class="st">'left'</span>,<span class="at">pad=</span><span class="st">'0'</span>)</span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>    et.i <span class="ot">=</span> <span class="fu">Sys.time</span>() <span class="sc">-</span> st.i</span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">'Fragment '</span>,cati,<span class="st">' time: '</span>,<span class="fu">paste</span>(<span class="fu">round</span>(et.i,<span class="dv">2</span>)),<span class="st">' '</span>,<span class="fu">attr</span>(et.i,<span class="st">'units'</span>))</span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>    <span class="at">RLI.vals =</span> <span class="fu">bind_rows</span>(purrr<span class="sc">::</span><span class="fu">map</span>(sentieri, <span class="cf">function</span>(x){x<span class="sc">$</span>df})),</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>    <span class="at">RLI.lins =</span> <span class="fu">bind_rows</span>(purrr<span class="sc">::</span><span class="fu">map</span>(sentieri, <span class="cf">function</span>(x){<span class="fu">st_sf</span>(x<span class="sc">$</span>best.path)}))</span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(graphical){</span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(<span class="fu">as_Spatial</span>(orirange), <span class="at">col=</span><span class="st">'black'</span>, <span class="at">border=</span><span class="cn">NA</span>)</span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(<span class="fu">as_Spatial</span>(rprp),<span class="at">col=</span><span class="st">'darkolivegreen3'</span>,<span class="at">add=</span>T,<span class="at">border=</span><span class="cn">NA</span>)</span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(out<span class="sc">$</span>RLI.lins, <span class="at">col=</span>col.bl, <span class="at">add=</span>T, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a>  et<span class="ot">=</span><span class="fu">Sys.time</span>()<span class="sc">-</span>st</span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="fu">paste0</span>(<span class="st">'... DONE! Total elapsed time: '</span>,<span class="fu">paste</span>(<span class="fu">round</span>(et,<span class="dv">2</span>)),<span class="st">' '</span>,<span class="fu">attr</span>(et,<span class="st">'units'</span>)))</span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(out)</span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Here is a simple tutorial.&nbsp;In this example, we calculate RLI for Taurus fir (<a href="https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:261491-1">Abies cilicica</a>), a tree species growing in Lebanon and Turkey. The original native range was downloaded <a href="http://data.mendeley.com/datasets/hr5h2hcgg4">here</a> (source: <a href="https://doi.org/10.1016/j.dib.2017.05.007">Caudullo et al.&nbsp;2017</a>).</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1. prepare the data</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>

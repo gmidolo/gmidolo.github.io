@@ -3,9 +3,9 @@ title: "CV (in brief)"
 ---
 
 ### **Education and Employment History**
+
 \
-![](imgs/timeframe.career.crop.png){fig-align="center"}
-\
+![](imgs/timeframe.career.crop.png){fig-align="center"}\
 
 -   **Researcher (III level)** (2023 - current) at [CNR-IRET](https://www.iret.cnr.it/en/){target="_blank"} - National Research Council of Italy, Pisa (Italy);
 
@@ -17,15 +17,14 @@ title: "CV (in brief)"
 -   **MSc Environmental Science** (2015 - 2017) at Wageningen University & Research, Wageningen (The Netherlands). MSc thesis at the [ESA group](https://www.wur.nl/en/research-results/chair-groups/environmental-sciences/environmental-systems-analysis-group.htm){target="_blank"}: "*Plant biodiversity loss following increased atmospheric nitrogen deposition: A systematic review*" (supervisors: Wim De Vries; Rob Alkemade); **\
     Intern (MSc Internship)** (2017, 4 months) at [Forest & Nature Lab](https://www.ugent.be/bw/environment/en/research/fornalab){target="_blank"} -- Department of Forest and Water Management -- Ghent University, Ghent (Belgium);
 
--   **BSc Forest Science** (2011 - 2014) at University of Turin, Turin (Italy) 110 cum laude. Thesis title (in Italian): "Redox reactions in the soil and their environmental significance" (supervisor: Franco Ajmone Marsan).
-\
+-   **BSc Forest Science** (2011 - 2014) at University of Turin, Turin (Italy) 110 cum laude. Thesis title (in Italian): "Redox reactions in the soil and their environmental significance" (supervisor: Franco Ajmone Marsan).\
 
 ### Main publications
 
 ::: {style="text-indent: -40px; padding-left: 40px;"}
 **Midolo, G.**, Mendez-Castro, F. & Ottaviani, G. (2023) Why studying the response of trait coordination to insularity matters? *Journal of Biogeography, 00, 1--9*. <https://doi.org/10.1111/JBI.14706>
 
-**Midolo, G.**, Herben, T., Axmanová, I., Marcenò, C., Pätsch, R., Bruelheide, H., \... & Chytrý, M. (2022). Disturbance indicator values for European plants. *Global Ecology and Biogeography*, *32*(1), 24-34. <https://doi.org/10.1111/geb.13603>
+**Midolo, G.**, Herben, T., Axmanová, I., Marcenò, C., Pätsch, R., Bruelheide, H., ... & Chytrý, M. (2022). Disturbance indicator values for European plants. *Global Ecology and Biogeography*, *32*(1), 24-34. <https://doi.org/10.1111/geb.13603>
 
 **Midolo, G.**, Kuss, P., & Wellstein, C. (2021). Land use and water availability drive community-level plant functional diversity of grasslands along a temperature gradient in the Swiss Alps. *Science of The Total Environment*, *764*, 142888. <https://doi.org/10.1016/j.scitotenv.2020.142888>
 
