@@ -10,7 +10,7 @@ website:
         text: Home
       - cv.qmd
       - Rtools.qmd
-      - art.qmd
+      #- art.qmd
     logo: imgs/butvec.logo.svg
     search: true
     right:
