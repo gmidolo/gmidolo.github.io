@@ -1,0 +1,17 @@
+---
+format: html
+page-layout: full
+---
+
+# Contact Me
+
+Please feel free to reach out through any of the methods below
+
+### 📧 Email 
+[gabriele.midolo@gmail.com](mailto:gabriele.midolo@gmail.com)
+
+### 💬 Social Media
+- [LinkedIn](https://www.linkedin.com/in/gabriele-midolo-a49a99158)
+- [GitHub](https://github.com/gmidolo)
+- [Twitter](https://x.com/gabriele_midolo)
+

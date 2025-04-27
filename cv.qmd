@@ -1,27 +1,149 @@
----
-title: "CV (in brief)"
----
+[*A plant ecologist by training, I bring 8+ years of research experience from various European scientific settings. My daily practice involves the integrated application of advanced R programming, machine learning, and GIS to effectively address my research questions.*]{style="font-size: 1.2em;"}
 
-### **Education and Employment History**
+### Computer Skills
+
+**Programming Languages & Environments:**
+
+-   **R** (The mail tool I use for data science & analysis)
+    -   Data management in SQL (`DBI`) and manipulation (`tidyverse`)
+    -   Statistical analyses and modeling (including Machine Learning with `tidymodels`)
+    -   MLOps (`vetiver`)
+    -   Data visualization (e.g., `ggplot`, `leaflet`, `plotly`)
+    -   Spatial data analysis:
+        -   GIS / Simple Features (`sf`)
+        -   Raster Data (`terra`)
+-   **mySQL** (Data management and Manipulation)
+-   **R Markdown** (Creating dynamic reports and documentations)
+-   **Quarto** (Developing websites and presentations)
+-   **Git & GitHub** (Repository management & collaboration)
+-   **LaTeX** (Document typesetting)
+
+<!-- ### **Computer Skills** -->
+
+<!-- | Category                        | Skill/Technology                     | Specific Areas/Packages                                  | -->
+
+<!-- | :------------------------------ | :----------------------------------- | :------------------------------------------------------- | -->
+
+<!-- | **Programming Languages** | R Programming                      | `tidyverse`, `tidymodels`, `vetiver`, `sf`, `terra`     | -->
+
+<!-- | **Database Management** | mySQL                              |                                                          | -->
+
+<!-- | **Document Preparation** | LaTeX                              |                                                          | -->
+
+### Education & Employment History
+
+```{r, include=FALSE}
+library(leaflet);library(tidyverse);library(htmltools);library(leaflegend)
+library(fontawesome) #devtools::install_github("rstudio/fontawesome")
+library(leaflet.providers)
+cities=c('Turin', 'Wageningen', 'Gent', 'Bozen-Bolzano', 'Gothenburg', 'Brno', 'Zurich', 'Pisa', 'Prague')
+countries = c('Italy','Netherlands','Belgium','Italy','Sweden','Czech Republic','Switzerland','Italy','Czech Republic')
+institutions = c(
+  'University of Turin',
+  'Wageningen University & Research',
+  'Gent University',
+  'Free University of Bozen-Bolzano',
+  'University of Gothenburg',
+  'Masaryk University',
+  'Swiss Federal Research Institute (WSL)',
+  'National Research Council of Italy (CNR)',
+  'Czech University of Life Sciences Prague'
+)
+locations_df <- data.frame(
+  city = cities,
+  country = countries,
+  institution = institutions,
+  latitude = c(45.0703, 51.9756, 51.0543, 46.4978, 57.7089, 49.1952, 47.353, 43.7228, 50.0755),
+  longitude = c(7.6869, 5.6658, 3.7201, 11.3548, 11.9746, 16.6079, 8.4373, 10.4078, 14.4378),
+  date = c('2011-2014', '2015-2017', '2017', '2017-2020', '2020', '2021-2023', '2022', '2023', '2024-'),
+  goal = c('BSc degree','MSc degree','MSc trainsheep', 'PhD', 'Visiting PhD', 'PostDoc', 'Visiting Researcher', 'Researcher','PostDoc'),
+  goal_status = c('Education','Education','Visiting', 'Education', 'Visiting', 'Work', 'Visiting', 'Work','Work'),
+  color = hcl.colors(length(cities), 'plasma')
+) %>%
+  mutate(id = 1:nrow(.)) %>%
+  mutate(city_and_goal = paste0(city, ': ', goal, ' (',goal_status,')'))
+
+# General information text
+general_info <- HTML("<p>Educational & professional experiences</p>")
+
+# define list of icons
+icoLst <- awesomeIconList(
+  Education = makeAwesomeIcon(text = fa("user-graduate"), markerColor='red'),
+  Work = makeAwesomeIcon(text = fa("briefcase"), markerColor='blue'),
+  Visiting = makeAwesomeIcon(text = fa("eye"), markerColor='green')
+)
+icoLst_leg <- awesomeIconList(
+  Education = makeAwesomeIcon(text='',markerColor='red'),
+  Work = makeAwesomeIcon(text='',markerColor='blue'),
+  Visiting = makeAwesomeIcon(text = '', markerColor='green')
+)
+
+# Create the leaflet map
+my_map <- leaflet(locations_df) %>%
+  addControl(general_info, position = "bottomleft") %>%
+  addAwesomeMarkers(data = locations_df,
+                    ~longitude,
+                    ~latitude,
+                    icon = ~ icoLst[goal_status],
+                    popup = paste(
+                          "<b>", htmlEscape(as.character(locations_df$goal)), "</b><br>",
+                           htmlEscape(locations_df$institution), "<br>",
+                           htmlEscape(locations_df$country), "<br>",
+                           htmlEscape(as.character(locations_df$date))
+                          
+                        ),
+                        label = ~city_and_goal 
+                      ) %>%
+  addLegendAwesomeIcon(
+    iconSet = icoLst_leg,
+    position = "topleft"
+  ) %>%
+  addTiles() %>%
+  setView(10.16,51.23,zoom=4) %>%
+  htmlwidgets::onRender(
+    "function(el, x) {
+      el.style.width = '300px !important';
+      el.style.height = '100px !important';
+    }"
+  )
+  
+
+```
 
 \
 ![](imgs/timeframe.career.crop.png){fig-align="center"}\
 
--   **Researcher (III level)** (2023 - current) at [CNR-IRET](https://www.iret.cnr.it/en/){target="_blank"} - National Research Council of Italy, Pisa (Italy);
+<style>
+.html-widget {
+    margin: auto;
+}
+</style>
+
+```{r, echo=FALSE, out.width='60%', fig.align='center'}
+my_map
+```
+
+\
+
+-   **Postdoctoral fellow** (2024 - current) at [MOBI lab](https://petrkeil.github.io/){target="_blank"} - Czech University of Life Sciences, Prague (Czech Republic);
+
+-   **Researcher (III level)** (2023) at [CNR-IRET](https://www.iret.cnr.it/en/){target="_blank"} - National Research Council of Italy, Pisa (Italy);
 
 -   **Postdoctoral fellow** (2021 - 2023) at the [Vegetation Science Group](https://botzool.cz/vegsci/){target="_blank"} of the Department of Botany and Zoology, Masaryk University, Brno (Czech Republic);
 
--   **PhD in Mountain Environment & Agriculture** (2017 - 2021) cum laude at the Free University of Bozen-Bolzano, Bolzano (Italy). Thesis title: "[*Meta-analyses upon the intraspecific plant trait variability within the environmental and geographic space*](https://hdl.handle.net/10863/34076){target="_blank"}" (supervisor: Camilla Wellstein);\
+-   **PhD in Mountain Environment & Agriculture** (2017 - 2021) *cum laude* at the Free University of Bozen-Bolzano, Bolzano (Italy). Thesis title: "[*Meta-analyses upon the intraspecific plant trait variability within the environmental and geographic space*](https://hdl.handle.net/10863/34076){target="_blank"}" (supervisor: Camilla Wellstein);\
     **Visiting PhD student** (2020, 6 months) at the [Antonelli Lab](https://antonelli-lab.net/){target="_blank"}, Gothenburg Global Biodiversity Centre - University of Gothenburg, Gothenburg (Sweden);
 
 -   **MSc Environmental Science** (2015 - 2017) at Wageningen University & Research, Wageningen (The Netherlands). MSc thesis at the [ESA group](https://www.wur.nl/en/research-results/chair-groups/environmental-sciences/environmental-systems-analysis-group.htm){target="_blank"}: "*Plant biodiversity loss following increased atmospheric nitrogen deposition: A systematic review*" (supervisors: Wim De Vries; Rob Alkemade); **\
     Intern (MSc Internship)** (2017, 4 months) at [Forest & Nature Lab](https://www.ugent.be/bw/environment/en/research/fornalab){target="_blank"} -- Department of Forest and Water Management -- Ghent University, Ghent (Belgium);
 
--   **BSc Forest Science** (2011 - 2014) at University of Turin, Turin (Italy) 110 cum laude. Thesis title (in Italian): "Redox reactions in the soil and their environmental significance" (supervisor: Franco Ajmone Marsan).\
+-   **BSc Forest Science** (2011 - 2014) at University of Turin, Turin (Italy) *cum laude*. Thesis title (in Italian): "Redox reactions in the soil and their environmental significance" (supervisor: Franco Ajmone Marsan).\
 
-### Main publications
+### Lead Author Scientific Publications
 
 ::: {style="text-indent: -40px; padding-left: 40px;"}
+**Midolo, G.**, Skokanová, H., Clark, A. T., Vymazalová, M., Chytrý, M., Dullinger, S., ... & Keil, P. (2025) Nineteenth-century land use shapes the current occurrence of some plant species, but weakly affects the richness and total composition of Central European grasslands. *Landscape Ecology, 40*(1), 22. <https://doi.org/10.1007/s10980-024-02016-6>
+
 **Midolo, G.** (2024) Plant functional traits couple with range size and shape in European trees *Global Ecology and Biogeography, e13838*. <https://doi.org/10.1111/geb.13838>
 
 **Midolo, G.**, Axmanová, I., Divíšek, J., Dřevojan, P., Lososová, Z., Večeřa, M., ... & Chytrý, M. (2024). Diversity and distribution of Raunkiær's life forms in European vegetation. *Journal of Vegetation Science*, *35*(1), e13229. <https://doi.org/10.1111/jvs.13229>

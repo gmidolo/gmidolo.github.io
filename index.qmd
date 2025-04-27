@@ -4,12 +4,11 @@ title: "Gabriele Midolo"
 
 Welcome - and thanks for visiting!
 
-I like to study how species are organized in time and space, with major focus on plants and their functional trait variation across various scales. My research approaches mainly involve the use of large databases and quantitative syntheses exploring shared patterns across different biomes and species.
+In this website you can check [my condensed CV](/cv.html) and [my data portfolio](/projects.html).
 
-In this website you can check my [condensed scientific CV](/cv.html) and some [R-related stuff](/Rtools.html).
+I am currently a researcher interested in studying how species are organized in time and space, with a major focus on plants and their functional trait variation across various scales. My research primarily involves the use of large databases and quantitative syntheses to explore shared patterns across different biomes and species.
 
-*N.B.: This website is still under development and may change in due course.*
-
-![Here is a quick b/w sketch of *Plebejus argus* - my favourite butterfly.](imgs/butvec.svg){style="text-align: center;" fig-align="center" width="191"}
+![*Plebejus* (*Plebejus*) *argus* (Linnaeus, 1758) - Lycaenidae Polyommatinae Polyommatini\
+Drawing by G. Midolo](imgs/butvec.svg){style="text-align: center;" fig-align="center" width="191"}
 
 \

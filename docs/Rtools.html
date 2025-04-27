@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Gabriele Midolo - R codes</title>
+<title>R codes – Gabriele Midolo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -80,7 +80,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -89,6 +95,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -102,9 +109,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     <img src="./imgs/butvec.logo.svg" alt="" class="navbar-logo">
     </a>
@@ -113,45 +120,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./cv.html" rel="" target="">
- <span class="menu-text">CV (in brief)</span></a>
+    <a class="nav-link" href="./cv.html"> 
+<span class="menu-text">CV (in brief)</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./Rtools.html" rel="" target="" aria-current="page">
- <span class="menu-text">R codes</span></a>
+    <a class="nav-link active" href="./Rtools.html" aria-current="page"> 
+<span class="menu-text">R codes</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://www.researchgate.net/profile/Gabriele-Midolo" rel="" target="">
- <span class="menu-text"><iconify-icon inline="" icon="academicons:researchgate-square"></iconify-icon></span></a>
+    <a class="nav-link" href="https://www.researchgate.net/profile/Gabriele-Midolo"> 
+<span class="menu-text"><iconify-icon inline="" icon="academicons:researchgate-square"></iconify-icon></span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://scholar.google.com/citations?user=E8yonpAAAAAJ&amp;hl" rel="" target="">
- <span class="menu-text"><iconify-icon inline="" icon="academicons:google-scholar-square"></iconify-icon></span></a>
+    <a class="nav-link" href="https://scholar.google.com/citations?user=E8yonpAAAAAJ&amp;hl"> 
+<span class="menu-text"><iconify-icon inline="" icon="academicons:google-scholar-square"></iconify-icon></span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://twitter.com/gabriele_midolo" rel="" target="">
- <span class="menu-text"><iconify-icon inline="" icon="fa6-brands:twitter"></iconify-icon></span></a>
+    <a class="nav-link" href="https://twitter.com/gabriele_midolo"> 
+<span class="menu-text"><iconify-icon inline="" icon="fa6-brands:twitter"></iconify-icon></span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://orcid.org/0000-0003-1316-2546" rel="" target="">
- <span class="menu-text"><iconify-icon inline="" icon="academicons:orcid"></iconify-icon></span></a>
+    <a class="nav-link" href="https://orcid.org/0000-0003-1316-2546"> 
+<span class="menu-text"><iconify-icon inline="" icon="academicons:orcid"></iconify-icon></span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -188,7 +195,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <p><strong>In this page, I aim to provide a collection of R codes and functions that can be valuable to fellow scientists engaged in plant ecology research or related fields.</strong></p>
 <p>Your feedback and contributions are highly encouraged as I do not consider myself an R expert. Please feel free to contact me at gabriele.midolo [at] gmail [dot] com for any question or feedbacks.</p>
@@ -200,7 +209,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="imgs/floraveg.bellisperennis.JPG" class="img-fluid figure-img" width="685"></p>
-<figcaption class="figure-caption">Screenshot from the FloraVeg.EU website. For each species, some traits of the LHS scheme might be available. Original link: <a href="https://floraveg.eu/taxon/overview/Bellis%20perennis" target="_blank">here</a>.</figcaption>
+<figcaption>Screenshot from the FloraVeg.EU website. For each species, some traits of the LHS scheme might be available. Original link: <a href="https://floraveg.eu/taxon/overview/Bellis%20perennis" target="_blank">here</a>.</figcaption>
 </figure>
 </div>
 <p>These data are however not (yet!) available in the download section.</p>
@@ -397,7 +406,7 @@ Here are the functions that you can load in your environment to easily produce t
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="imgs/incompl.corr.matrix.JPG" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Example of output obtained, using default options. Upper left panel displays the number of observations without NAs (complete cases) for each pair; bottom right panel shows their correlation coefficient (default is ‘pearson’).</figcaption>
+<figcaption>Example of output obtained, using default options. Upper left panel displays the number of observations without NAs (complete cases) for each pair; bottom right panel shows their correlation coefficient (default is ‘pearson’).</figcaption>
 </figure>
 </div>
 </section>
@@ -410,7 +419,7 @@ Here are the functions that you can load in your environment to easily produce t
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="imgs/getrli.scheme.jpg" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Workflow to calculate range shape (= range elongation calculated as the Range Linearity Index, RLI) in the <code>get_RLI</code> function. The figure illustrates a schematic example for the native range of the wych elm (<em>Ulmus glabra</em>) (data source: Caudullo et al.&nbsp;2017). Panel <em>a)</em> display the whole range of the species. Panel <em>b)</em> shows the largest range portions (= fragments) selected for RLI calculation (the biggest range fragments are used by default based on the rationale these are more important in defyining the whole range shape). RLI for species <em>w</em> is calculated as the average of RLI values of each range fragment (RLI<em>i</em>). RLI is the dimensioness ratio between squared length (<em>l</em><sup>2</sup>) and area of the polygon, where <em>l</em> is the longest path across the shortest distance between the geographical points located at the extremes of each polygon (line in red; panel <em>c</em>). Maps are displayed with UTM EPSG:32633 projection.</figcaption>
+<figcaption>Workflow to calculate range shape (= range elongation calculated as the Range Linearity Index, RLI) in the <code>get_RLI</code> function. The figure illustrates a schematic example for the native range of the wych elm (<em>Ulmus glabra</em>) (data source: Caudullo et al.&nbsp;2017). Panel <em>a)</em> display the whole range of the species. Panel <em>b)</em> shows the largest range portions (= fragments) selected for RLI calculation (the biggest range fragments are used by default based on the rationale these are more important in defyining the whole range shape). RLI for species <em>w</em> is calculated as the average of RLI values of each range fragment (RLI<em>i</em>). RLI is the dimensioness ratio between squared length (<em>l</em><sup>2</sup>) and area of the polygon, where <em>l</em> is the longest path across the shortest distance between the geographical points located at the extremes of each polygon (line in red; panel <em>c</em>). Maps are displayed with UTM EPSG:32633 projection.</figcaption>
 </figure>
 </div>
 <p>Here is the code for the <code>get_RLI</code> function:</p>
@@ -631,7 +640,7 @@ Here are the functions that you can load in your environment to easily produce t
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="imgs/mapviewabiescilicica.jpg" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Simplified polygon shape for Taurus fir (<em>Abies cilicica</em>) using mapview</figcaption>
+<figcaption>Simplified polygon shape for Taurus fir (<em>Abies cilicica</em>) using mapview</figcaption>
 </figure>
 </div>
 <p>Now, let’s run the <code>get_RLI</code> function, with default options:</p>
@@ -644,7 +653,7 @@ Here are the functions that you can load in your environment to easily produce t
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="imgs/getrli.ac1.jpg" class="img-fluid figure-img" width="489"></p>
-<figcaption class="figure-caption">Graphical output obtained from the function at the end of RLI calculation (set <code>graphical=FALSE</code> to supress the plotting). By default the function displays the different fragments composing species ranges and the longest paths (in red). These are only calculated and drawn for the range fragments considered in the analysis (in green; unutilized range fragment are displayed in black).</figcaption>
+<figcaption>Graphical output obtained from the function at the end of RLI calculation (set <code>graphical=FALSE</code> to supress the plotting). By default the function displays the different fragments composing species ranges and the longest paths (in red). These are only calculated and drawn for the range fragments considered in the analysis (in green; unutilized range fragment are displayed in black).</figcaption>
 </figure>
 </div>
 <p>Let’s inspect the results:</p>
@@ -664,7 +673,7 @@ Here are the functions that you can load in your environment to easily produce t
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="imgs/fragments.very.graphical.JPG" class="img-fluid figure-img" width="632"></p>
-<figcaption class="figure-caption">All possible paths considered in each of the fragments assessed. Across each of the four path, the longest one is selected to calculate <em>l</em> by default. N.B. the geographic coordinates on the xy follow the Behrman transformation for estimation of geographic extremes.</figcaption>
+<figcaption>All possible paths considered in each of the fragments assessed. Across each of the four path, the longest one is selected to calculate <em>l</em> by default. N.B. the geographic coordinates on the xy follow the Behrman transformation for estimation of geographic extremes.</figcaption>
 </figure>
 </div>
 <p>In some systems, one may want to focus exclusively upon the elongation along either longitude or latitude. For example, given the south-to-north distribution of Andean montane forests, one might be interested in knowing the elongation of a species along latitude (e.g.&nbsp;see Graves 1988). On the other hand, range elongation along longitiude might be a good indicator for e.g.&nbsp;plant species constrained to coastal lines in the Mediterranean. In this context, we can simply force the function to consider only northermost-to-southernmost points with <code>directional.constraint = 'lat'</code> or westernmost-to-easternmost points with <code>directional.constraint = 'lon'</code> (default is <code>directional.constraint = 'none'</code>)</p>
@@ -674,7 +683,7 @@ Here are the functions that you can load in your environment to easily produce t
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="imgs/getrli.ac4.PNG" class="img-fluid figure-img" width="596"></p>
-<figcaption class="figure-caption">The visual output obtained when <code>directional.constraint</code> parameter is modified accordingly (edited figures)</figcaption>
+<figcaption>The visual output obtained when <code>directional.constraint</code> parameter is modified accordingly (edited figures)</figcaption>
 </figure>
 </div>
 <p>Finally, one may also consider more fragments for RLI calculation, as in principle there is no reason to exclude smallest fragments. However, I) range polygons could be much more complex and bigger than what we are using here, resulting into non-negligible computation times for this function, and II) the RLI calculation weighted by area makes nearly useless to consider all possible tiny fragments composing a species range. Anyway, we can modify the <code>fragment.inclusivity</code> parameter to do so (default here is setted to 0.1). This is a threshold value. It allows the inclusion of fragments by calculating the ratio between the area of each fragment to the area of the fragment with the largest area. Only fragments with values greater or equal to <code>fragment.inclusivity</code> are included for RLI calculation. Thus, the lowest this value, the highest is the proportion of fragments considered for range calculation. Set <code>fragment.inclusivity=0</code> if you want all fragments to be considered for RLI estimation.</p>
@@ -682,7 +691,7 @@ Here are the functions that you can load in your environment to easily produce t
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>res2 <span class="ot">&lt;-</span> <span class="fu">get_RLI</span>(range, <span class="at">fragment.inclusivity =</span> <span class="fl">0.02</span>) <span class="co"># default is 0.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="imgs/getrli.ac5.PNG" class="img-fluid figure-img" width="377"></p>
+<p><img src="imgs/getrli.ac5.PNG" class="img-fluid quarto-figure quarto-figure-center figure-img" width="377"></p>
 </figure>
 </div>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> res2<span class="sc">$</span>RLI.vals <span class="co"># we now included more fragments</span></span>
@@ -745,18 +754,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -788,11 +786,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -802,8 +839,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -815,7 +861,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -859,6 +1028,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -884,6 +1054,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -944,6 +1140,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

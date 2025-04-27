@@ -1,0 +1,13 @@
+---
+title: "Projects"
+description: "Here you can see some of my data projects. Data repository and code for my analyses in R are available through [figshare](https://figshare.com/authors/Gabriele_Midolo/4610374) and [github](https://github.com/gmidolo)"
+listing:
+  contents: posts
+  type: "default"
+  sort:
+    "publishDate desc"
+  categories: true
+  filter-ui: [category, title, date]
+---
+
+------------------------------------------------------------------------
