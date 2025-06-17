@@ -4,19 +4,19 @@
 
 **Programming Languages & Environments:**
 
--   **R** (The mail tool I use for data science & analysis)
+-   **R** \[*expert*\]
     -   Data management in SQL (`DBI`) and manipulation (`tidyverse`)
     -   Statistical analyses and modeling (including Machine Learning with `tidymodels`)
-    -   MLOps (`vetiver`)
     -   Data visualization (e.g., `ggplot`, `leaflet`, `plotly`)
     -   Spatial data analysis:
         -   GIS / Simple Features (`sf`)
         -   Raster Data (`terra`)
--   **mySQL** (Data management and Manipulation)
--   **R Markdown** (Creating dynamic reports and documentations)
--   **Quarto** (Developing websites and presentations)
--   **Git & GitHub** (Repository management & collaboration)
--   **LaTeX** (Document typesetting)
+-   **Python** \[*advanced*\]
+    -   Supervised ML (`sklearn`)
+    -   Data manipulation (`pandas`, `geopandas`)
+-   **mySQL** & **PostgreSQL** \[*basic*\]
+-   **R Markdown, LaTeX**, **Quarto** (creating dynamic reports and documentations) \[*advanced*\]
+-   **Git & GitHub** \[*advanced*\]
 
 <!-- ### **Computer Skills** -->
 
