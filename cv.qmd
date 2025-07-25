@@ -15,7 +15,7 @@
     -   Supervised ML (`sklearn`)
     -   Data manipulation (`pandas`, `geopandas`)
 -   **mySQL** & **PostgreSQL** \[*basic*\]
--   **R Markdown, LaTeX**, **Quarto** (creating dynamic reports and documentations) \[*advanced*\]
+-   **R Markdown, LaTeX**, **Quarto, R Shiny** (creating dynamic reports and documentations) \[*advanced*\]
 -   **Git & GitHub** \[*advanced*\]
 
 <!-- ### **Computer Skills** -->
@@ -113,12 +113,13 @@ my_map <- leaflet(locations_df) %>%
 \
 ![](imgs/timeframe.career.crop.png){fig-align="center"}\
 
+```{=html}
 <style>
 .html-widget {
     margin: auto;
 }
 </style>
-
+```
 ```{r, echo=FALSE, out.width='60%', fig.align='center'}
 my_map
 ```
