@@ -81,7 +81,7 @@
     "href": "projects.html",
     "title": "Projects",
     "section": "",
-    "text": "Reconstructing 25 years of house price dynamics across the United States without time series data\n\n\n\n\n\n\n\nmachine learning\n\n\nGIS\n\n\n\n\nA ML-driven geostatistical interpolation to predict 25-year price changes of houses across the United States without temporal replication\n\n\n\n\n\n\nApr 26, 2025\n\n\n\n\n\n\n  \n\n\n\n\nMeasuring species range elongation\n\n\n\n\n\n\n\necology\n\n\nGIS\n\n\n\n\nAn R function to calculate the Range Linearity Index (RLI) by Pigot et al. (2010)\n\n\n\n\n\n\nApr 18, 2024\n\n\n\n\n\n\n  \n\n\n\n\nObtain functional traits for European plants\n\n\n\n\n\n\n\ndata mining\n\n\necology\n\n\n\n\nHere I provide a function in R to mine ‘LHS’ traits (i.e., specific leaf area, plant height, and seed mass) from FloraVeg.EU\n\n\n\n\n\n\nOct 1, 2023\n\n\n\n\n\n\n  \n\n\n\n\nSimple pairwise visualizations for incomplete datasets\n\n\n\n\n\n\n\ndata visualization\n\n\necology\n\n\n\n\nAn R code to visualize correlations using complete observations for each pairwise combination\n\n\n\n\n\n\nSep 9, 2023\n\n\n\n\n\n\nNo matching items"
+    "text": "Mapping six decades of vascular plant species richness change across Europe\n\n\n\n\n\n\n\nGIS\n\n\nmachine learning\n\n\ndata visualization\n\n\nShinyApp\n\n\n\n\nR Shiny dashboard mapping species richness dynamics\n\n\n\n\n\n\nJul 21, 2025\n\n\n\n\n\n\n  \n\n\n\n\nReconstructing 25 years of house price dynamics across the United States without time series data\n\n\n\n\n\n\n\nmachine learning\n\n\nGIS\n\n\n\n\nA ML-driven geostatistical interpolation to predict 25-year price changes of houses across the United States without temporal replication\n\n\n\n\n\n\nApr 26, 2025\n\n\n\n\n\n\n  \n\n\n\n\nMeasuring species range elongation\n\n\n\n\n\n\n\necology\n\n\nGIS\n\n\n\n\nAn R function to calculate the Range Linearity Index (RLI) by Pigot et al. (2010)\n\n\n\n\n\n\nApr 18, 2024\n\n\n\n\n\n\n  \n\n\n\n\nObtain functional traits for European plants\n\n\n\n\n\n\n\ndata mining\n\n\necology\n\n\n\n\nHere I provide a function in R to mine ‘LHS’ traits (i.e., specific leaf area, plant height, and seed mass) from FloraVeg.EU\n\n\n\n\n\n\nOct 1, 2023\n\n\n\n\n\n\n  \n\n\n\n\nSimple pairwise visualizations for incomplete datasets\n\n\n\n\n\n\n\ndata visualization\n\n\necology\n\n\n\n\nAn R code to visualize correlations using complete observations for each pairwise combination\n\n\n\n\n\n\nSep 9, 2023\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "lhs_traints.html",
@@ -257,5 +257,12 @@
     "title": "Contact Me",
     "section": "Phone",
     "text": "Phone\n +39 3703185439"
+  },
+  {
+    "objectID": "posts/intrpl_s_change_app.html",
+    "href": "posts/intrpl_s_change_app.html",
+    "title": "Mapping six decades of vascular plant species richness change across Europe",
+    "section": "",
+    "text": "App link: gmidolo.shinyapps.io/interpolated_s_change_app\nWe interpolated spatiotemporal changes in vascular plant species richness between 1960 and 2020 using Random Forests. Training and predictions are obtained over 660,748 European vegetation plots available on the European Vegetation Archive (Chytrý et al. 2020) and ReSurveyEurope (Knollová et al. 2024).\nPredictions of species richness from individual plots were aggregated onto a 10 km × 10 km grid. On the map, point size represents the number of plots within each grid cell. Areas with denser sampling in space and time are more likely to show more accurate trends.\nPreprint paper: Midolo et al. (2025) Six decades of losses and gains in alpha diversity of European plant communities EcoEvoRxiv https://doi.org/10.32942/X2164H\nApp code : gmidolo/interpolated_S_change_app"
   }
 ]
