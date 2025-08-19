@@ -6,3 +6,4 @@
 *.csv
 posts/intrpl_houseprince/data/models/RF.last_fit.rds
 posts/intrpl_houseprince/data/models/RF.preds.csv.gz
+quarto-*
