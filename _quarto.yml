@@ -4,7 +4,9 @@ project:
 
 website:
   title: "Gabriele Midolo"
+  favicon: imgs/butvec.logo.png
   navbar:
+    logo: imgs/butvec.logo.svg
     left:
       - icon: house-door-fill
         href: index.qmd
@@ -18,14 +20,10 @@ website:
       - icon: envelope-at-fill
         href: contact_me.qmd
         text: Contact me
-    favicon: imgs/butvec.logo.png
-    logo: imgs/butvec.logo.svg
     search: true
     right:
       - text: "{{< iconify fa6-brands linkedin >}}"
         href: "https://www.linkedin.com/in/gmidolo92/"
-      - text: "{{< iconify fa6-brands twitter >}}"
-        href: "https://twitter.com/gabriele_midolo"
       - text: "{{< iconify academicons researchgate-square >}}"
         href: "https://www.researchgate.net/profile/Gabriele-Midolo"
       - text: "{{< iconify academicons google-scholar-square >}}"

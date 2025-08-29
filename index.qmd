@@ -1,6 +1,7 @@
 ---
 title: "Gabriele Midolo"
 format: html
+pagetitle: "G.Midolo - Home"
 ---
 
 ```{=html}
