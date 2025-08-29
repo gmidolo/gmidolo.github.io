@@ -1,5 +1,6 @@
 ---
 title: "Mapping six decades of vascular plant species richness change across Europe"
+pagetitle: "G.Midolo - Mapping six decades of vascular plant species richness change across Europe"
 description: "R Shiny dashboard mapping species richness dynamics"
 image: "https://raw.githubusercontent.com/gmidolo/interpolated_S_change_app/main/screenshot.app.png"
 date: "2025-07-21"

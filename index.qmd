@@ -3,16 +3,16 @@ title: "Gabriele Midolo"
 format: html
 ---
 
+```{=html}
 <style>
   .title {
     display: none;
   }
 </style>
-
-<div style="display: flex; align-items: center; justify-content: center;">
-  <img src="./imgs/profilepic.jpg" style="border-radius: 50%; width:170px; height:170px; object-fit: cover; margin-right: 15px;">
-  <span style="font-size: 2.5em; font-weight: 600;">Gabriele Midolo</span>
-</div>
+```
+::: {style="display: flex; align-items: center; justify-content: center;"}
+<img src="./imgs/profilepic.jpg" style="border-radius: 50%; width:170px; height:170px; object-fit: cover; margin-right: 15px;"/> [Gabriele Midolo]{style="font-size: 2.5em; font-weight: 600;"}
+:::
 
 Welcome - and thanks for visiting!
 

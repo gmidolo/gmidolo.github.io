@@ -1,5 +1,6 @@
 ---
 title: "Reconstructing 25 years of house price dynamics across the United States without time series data"
+pagetitle: "G.Midolo - Reconstructing 25 years of house price dynamics across the United States without time series data"
 description: "A ML-driven geostatistical interpolation to predict 25-year price changes of houses across the United States without temporal replication"
 date: "2025-04-26"
 publishDate: "2025-04-26"

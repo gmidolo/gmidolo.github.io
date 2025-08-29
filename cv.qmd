@@ -1,4 +1,8 @@
-[*A plant ecologist by training, I bring 8+ years of research experience from various European scientific settings. My daily practice involves the integrated application of advanced R programming, machine learning, and GIS to effectively address my research questions.*]{style="font-size: 1.2em;"}
+---
+pagetitle: "Curriculum Vitae"
+---
+
+[*A plant ecologist by training, I have >7 years of research experience from various European scientific settings. My daily practice involves the integrated application of advanced R programming, machine learning, and GIS to effectively address my research questions.*]{style="font-size: 1.2em;"}
 
 ### Computer Skills
 

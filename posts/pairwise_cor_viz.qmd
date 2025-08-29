@@ -1,5 +1,6 @@
 ---
 title: "Simple pairwise visualizations for incomplete datasets"
+pagetitle: "G.Midolo - Simple pairwise visualizations for incomplete datasets"
 description: "An R code to visualize correlations using complete observations for each pairwise combination"
 date: "2023-09-09"
 publishDate: "2023-09-09"

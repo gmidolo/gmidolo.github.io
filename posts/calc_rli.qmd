@@ -1,5 +1,6 @@
 ---
 title: "Measuring species range elongation"
+pagetitle: "G.Midolo - Measuring species range elongation"
 description: "An R function to calculate the Range Linearity Index (RLI) by [Pigot et al. (2010)](https://doi.org/10.1111/j.1461-0248.2010.01462.x)"
 date: "2024-04-18"
 publishDate: "2024-04-18"

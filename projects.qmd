@@ -1,5 +1,6 @@
 ---
 title: "Projects"
+pagetitle: "G.Midolo - Projects"
 description: "Here you can see some of my data projects. Data repository and code for my analyses in R are available through [figshare](https://figshare.com/authors/Gabriele_Midolo/4610374) and [github](https://github.com/gmidolo)"
 listing:
   contents: posts

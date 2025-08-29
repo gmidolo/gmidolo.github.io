@@ -1,5 +1,6 @@
 ---
 title: "Obtain functional traits for European plants"
+pagetitle: "G.Midolo - Obtain functional traits for European plants"
 description: "Here I provide a function in R to mine 'LHS' traits (i.e., specific leaf area, plant height, and seed mass) from FloraVeg.EU"
 date: "2023-10-01"
 publishDate: "2023-10-01"
