@@ -22,9 +22,9 @@ Predictions of species richness from individual plots were aggregated onto a 10 
 
 This application uses original data and code deposited at:<br>
                  - <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="15" style="vertical-align: middle; margin-right: 3px;"/> <a href="https://github.com/gmidolo/interpolated_S_change" target="_blank">github.com/gmidolo/interpolated_S_change</a><br>
-                 - <img src="https://about.zenodo.org/static/img/icons/zenodo-icon-black.svg" width="15" style="vertical-align: middle; margin-right: 3px;"/> <a href="https://doi.org/10.5281/zenodo.15836616" target="_blank">10.5281/zenodo.15836616</a>
+                 - <img src="https://about.zenodo.org/static/img/icons/zenodo-icon-black.svg" width="15" style="vertical-align: middle; margin-right: 3px;"/> <a href="https://doi.org/10.5281/zenodo.17357776" target="_blank">10.5281/zenodo.17357776</a>
 
-Preprint paper: [Midolo et al., 2025](https://doi.org/10.32942/X2164H)<br>
+Paper: [Midolo et al., 2025](https://doi.org/10.1111/ele.70248)<br>
 Code: [gmidolo/interpolated_S_change_app](https://github.com/gmidolo/interpolated_S_change_app)
 
 <!-- <iframe src="https://gmidolo.shinyapps.io/interpolated_s_change_app/" width="100%" height="700px" style="border:none;"></iframe> -->
